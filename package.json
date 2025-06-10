@@ -1,5 +1,5 @@
 {
-  "name": "app-launcher",
+  "name": "@dwashkarma/app-launcher",
   "version": "1.0.0",
   "description": "A React TypeScript component for an app launcher, similar to Google app launcher, for company products.",
   "repository": {
