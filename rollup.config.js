@@ -1,4 +1,5 @@
 const packageJson = require("./package.json");
+import inject from "@rollup/plugin-inject";
 
 import nodeResolve from "@rollup/plugin-node-resolve";
 import commonJs from "@rollup/plugin-commonjs";
@@ -50,6 +51,9 @@ export default [
       PeerDepsExternalPlugin(),
       nodeResolve(),
       commonJs(),
+      inject({
+        jsxRuntime: "react/jsx-runtime", // inject jsxRuntime import
+      }),
       terser(),
       typescript({ tsconfig: "./tsconfig.json" }),
     ],
