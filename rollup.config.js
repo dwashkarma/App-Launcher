@@ -48,7 +48,6 @@ export default [
       sourcemap: true,
     },
     plugins: [
-      PeerDepsExternalPlugin(),
       nodeResolve(),
       commonJs(),
       inject({
