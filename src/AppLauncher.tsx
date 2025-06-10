@@ -17,11 +17,15 @@ export interface DropdownStyles {
 export interface AppLauncherProps {
   products: AppLauncherProduct[];
   dropdownStyles?: DropdownStyles;
+  svgColor?: string;
+  position?: "right" | "left" | "center";
 }
 
 export const AppLauncher: React.FC<AppLauncherProps> = ({
   products,
   dropdownStyles = {},
+  svgColor = "#555",
+  position = "left",
 }) => {
   const [open, setOpen] = useState(false);
   const launcherRef = useRef<HTMLDivElement>(null);
@@ -33,7 +37,11 @@ export const AppLauncher: React.FC<AppLauncherProps> = ({
       maxHeight: 350,
       overflowY: "auto" as const,
       top: 56,
-      left: 0,
+      ...(position === "left"
+        ? { left: 0 }
+        : position === "right"
+        ? { right: 0 }
+        : { left: "50%", transform: "translateX(-50%)" }),
       zIndex: 1000,
       background: "#fff",
       borderRadius: 12,
@@ -42,7 +50,13 @@ export const AppLauncher: React.FC<AppLauncherProps> = ({
       minWidth: 320,
       marginTop: 4,
       opacity: open ? 1 : 0,
-      transform: open ? "translateY(0)" : "translateY(-12px)",
+      transform: open
+        ? position === "center"
+          ? "translate(-50%, 0)"
+          : "translateY(0)"
+        : position === "center"
+        ? "translate(-50%, -12px)"
+        : "translateY(-12px)",
       transition:
         "opacity 0.25s cubic-bezier(.4,2,.6,1), transform 0.25s cubic-bezier(.4,2,.6,1)",
       pointerEvents: open ? "auto" : "none",
@@ -116,7 +130,7 @@ export const AppLauncher: React.FC<AppLauncherProps> = ({
         aria-label="Open app launcher"
         onClick={() => setOpen((v) => !v)}
         style={{
-          background: "#fff",
+          background: "transparent",
           borderRadius: "10%",
           width: 48,
           height: 48,
@@ -144,7 +158,7 @@ export const AppLauncher: React.FC<AppLauncherProps> = ({
                 cx={6 + col * 6}
                 cy={6 + row * 6}
                 r={1.5}
-                fill="#555"
+                fill={svgColor}
               />
             ))
           )}

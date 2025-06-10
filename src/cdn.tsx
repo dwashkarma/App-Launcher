@@ -1,34 +1,41 @@
 import React from "react";
-import ReactDOM from "react-dom/client";
-import { AppLauncher, AppLauncherProduct, DropdownStyles } from "./AppLauncher";
+import { createRoot } from "react-dom/client";
+import { AppLauncher, AppLauncherProduct } from "./AppLauncher";
 
 // Declare global types
 declare global {
   interface Window {
-    renderAppLauncher: (config: {
-      elementId: string;
-      products: AppLauncherProduct[];
-      dropdownStyles?: DropdownStyles;
-    }) => void;
+    renderAppLauncher: (
+      elementId: string,
+      products: AppLauncherProduct[],
+      options?: {
+        dropdownStyles?: any;
+        svgColor?: string;
+        position?: "right" | "left" | "center";
+      }
+    ) => void;
   }
 }
 
 // Expose a global function for CDN usage
-window.renderAppLauncher = function ({
-  elementId,
-  products,
-  dropdownStyles,
-}: {
-  elementId: string;
-  products: AppLauncherProduct[];
-  dropdownStyles?: DropdownStyles;
-}) {
+window.renderAppLauncher = (
+  elementId: string,
+  products: AppLauncherProduct[],
+  options = {}
+) => {
   const container = document.getElementById(elementId);
   if (!container) {
-    throw new Error(`Element with id '${elementId}' not found.`);
+    console.error(`Container with id "${elementId}" not found`);
+    return;
   }
-  const root = ReactDOM.createRoot(container);
+
+  const root = createRoot(container);
   root.render(
-    <AppLauncher products={products} dropdownStyles={dropdownStyles} />
+    <AppLauncher
+      products={products}
+      dropdownStyles={options.dropdownStyles}
+      svgColor={options.svgColor}
+      position={options.position}
+    />
   );
 };
