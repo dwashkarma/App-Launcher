@@ -1,6 +1,6 @@
 {
   "name": "app-launcher-karma",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A React TypeScript component for an app launcher, similar to Google app launcher, for company products.",
   "repository": {
     "type": "git",
