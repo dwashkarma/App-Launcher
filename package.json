@@ -6,6 +6,14 @@
     "type": "git",
     "url": "https://github.com/dwashkarma/App-Launcher"
   },
+  "keywords": [
+    "custom-app-launcher",
+    "app-launcher-cdn",
+    "app-launcher",
+    "app-launcher-karma",
+    "app-launcher-react",
+    "app-launcher-typescript"
+  ],
   "license": "MIT",
   "author": "DwashKarma",
   "main": "dist/index.js",
