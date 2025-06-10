@@ -5,12 +5,13 @@ A React-based app launcher component available as an npm package and also via CD
 ## Features
 
 - 🚀 Easy integration via CDN or npm
-- ⚛️ Supports React and TypeScript
+- ⚛️ Built with React and TypeScript
+- 🎨 Fully customizable styling with CSS-in-JS
 - 📱 Responsive design with smooth animations
 - 🔗 Simple click-to-launch functionality
 - ⌨️ Keyboard navigation (ESC to close)
 - 🖱️ Click outside to close
-- 🖼️ Supports  URL and static images
+- 🖼️ Supports both URL and base64 icons
 - ♿ Accessible with proper ARIA labels
 
 ## Installation
@@ -119,9 +120,95 @@ interface AppLauncherProduct {
 ```typescript
 interface AppLauncherProps {
   products: AppLauncherProduct[];
+  dropdownStyles?: DropdownStyles;
 }
 ```
 
+### DropdownStyles
+
+```typescript
+interface DropdownStyles {
+  container?: CSSProperties;
+  grid?: CSSProperties;
+  item?: CSSProperties;
+  icon?: CSSProperties;
+  label?: CSSProperties;
+}
+```
+
+### Usage with Types
+
+```typescript
+import { AppLauncher, AppLauncherProduct, AppLauncherProps } from 'app-launcher-karma';
+
+const products: AppLauncherProduct[] = [
+    { 
+        name: "Gmail", 
+        icon: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==", 
+        url: "https://gmail.com" 
+    },
+    { 
+        name: "Calendar", 
+        icon: "/icons/calendar.png", 
+        url: "https://calendar.google.com" 
+    }
+];
+
+function MyComponent(): JSX.Element {
+    return <AppLauncher products={products} />;
+}
+```
+
+### Custom Styling
+
+```typescript
+import { AppLauncher, AppLauncherProduct, DropdownStyles } from 'app-launcher-karma';
+
+const customStyles: DropdownStyles = {
+    container: {
+        background: '#f8f9fa',
+        borderRadius: 16,
+        boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
+        minWidth: 400,
+    },
+    grid: {
+        gridTemplateColumns: 'repeat(4, 1fr)',
+        gap: 16,
+    },
+    item: {
+        padding: 12,
+        borderRadius: 12,
+        transition: 'all 0.2s ease',
+        ':hover': {
+            background: '#e9ecef',
+        }
+    },
+    icon: {
+        width: 64,
+        height: 64,
+        borderRadius: 8,
+    },
+    label: {
+        fontSize: 12,
+        fontWeight: 500,
+        color: '#495057',
+    }
+};
+
+const products: AppLauncherProduct[] = [
+    { name: "Dashboard", icon: "/icons/dashboard.png", url: "/dashboard" },
+    { name: "Analytics", icon: "/icons/analytics.png", url: "/analytics" },
+];
+
+function StyledLauncher(): JSX.Element {
+    return (
+        <AppLauncher 
+            products={products} 
+            dropdownStyles={customStyles}
+        />
+    );
+}
+```
 
 ## API Reference
 
@@ -133,6 +220,7 @@ When using the CDN version, call `window.renderAppLauncher(config)` with the fol
 |-----------|------|----------|-------------|
 | `elementId` | string | Yes | The id of the DOM element where the app launcher will be rendered |
 | `products` | array | Yes | Array of product objects (see Product Object structure below) |
+| `dropdownStyles` | object | No | Custom styles for dropdown elements (see Styling section below) |
 
 ### Product Object
 
@@ -151,6 +239,134 @@ Each product in the `products` array should have the following structure:
 - The `renderAppLauncher` function is exposed globally by the CDN bundle
 - Product icons should be optimized for web display (recommended: square images, 64x64px or larger)
 - URLs can be absolute or relative paths
+- Custom styles are merged with default styles, allowing for partial customization
+- The dropdown uses a 3-column grid by default, but can be customized via `dropdownStyles.grid`
+
+## Styling & Customization
+
+The app launcher supports comprehensive styling customization through the `dropdownStyles` prop. You can customize the following elements:
+
+### Styling Options
+
+| Style Key | Description | Default Values |
+|-----------|-------------|----------------|
+| `container` | Main dropdown container | Background: `#fff`, border-radius: `12px`, shadow, positioning |
+| `grid` | Product grid layout | 3-column grid with `10px` gap |
+| `item` | Individual product items | Flex column layout, padding: `8px`, border-radius: `8px` |
+| `icon` | Product icons | Size: `50x50px`, object-fit: `contain` |
+| `label` | Product name labels | Font-size: `14px`, color: `#222` |
+
+### Styling Examples
+
+#### Dark Theme
+```typescript
+const darkStyles: DropdownStyles = {
+    container: {
+        background: '#2d3748',
+        border: '1px solid #4a5568',
+    },
+    item: {
+        color: '#e2e8f0',
+        ':hover': {
+            background: '#4a5568',
+        }
+    },
+    label: {
+        color: '#e2e8f0',
+    }
+};
+```
+
+#### Compact Layout
+```typescript
+const compactStyles: DropdownStyles = {
+    container: {
+        minWidth: 280,
+        padding: 12,
+    },
+    grid: {
+        gridTemplateColumns: 'repeat(4, 1fr)',
+        gap: 8,
+    },
+    icon: {
+        width: 40,
+        height: 40,
+    },
+    label: {
+        fontSize: 12,
+    }
+};
+```
+
+#### Large Icons
+```typescript
+const largeIconStyles: DropdownStyles = {
+    container: {
+        minWidth: 480,
+    },
+    grid: {
+        gridTemplateColumns: 'repeat(3, 1fr)',
+        gap: 20,
+    },
+    item: {
+        padding: 16,
+    },
+    icon: {
+        width: 80,
+        height: 80,
+        borderRadius: 12,
+    },
+    label: {
+        fontSize: 16,
+        fontWeight: 600,
+        marginTop: 8,
+    }
+};
+```
+
+## Examples
+
+### CDN with Custom Styles
+```html
+<script>
+    const customStyles = {
+        container: {
+            background: '#f8f9fa',
+            borderRadius: 16,
+            minWidth: 400
+        },
+        grid: {
+            gridTemplateColumns: 'repeat(4, 1fr)',
+            gap: 16
+        },
+        icon: {
+            width: 60,
+            height: 60,
+            borderRadius: 8
+        }
+    };
+
+    window.renderAppLauncher({
+        elementId: "app-launcher",
+        products: [
+            { name: "Gmail", icon: "/icons/gmail.png", url: "https://gmail.com" },
+            { name: "Calendar", icon: "/icons/calendar.png", url: "https://calendar.google.com" }
+        ],
+        dropdownStyles: customStyles
+    });
+</script>
+```
+
+### With Base64 Icons
+```typescript
+const products: AppLauncherProduct[] = [
+    { 
+        name: "Internal Tool", 
+        icon: "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMTIiIGN5PSIxMiIgcj0iMTAiIGZpbGw9IiNmZjAwMDAiLz4KPHN2Zz4=", 
+        url: "/internal-tool" 
+    }
+];
+```
 
 ## License
 

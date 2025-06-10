@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, CSSProperties } from "react";
 
 export interface AppLauncherProduct {
   name: string;
@@ -6,13 +6,82 @@ export interface AppLauncherProduct {
   url: string;
 }
 
-export interface AppLauncherProps {
-  products: AppLauncherProduct[];
+export interface DropdownStyles {
+  container?: CSSProperties;
+  grid?: CSSProperties;
+  item?: CSSProperties;
+  icon?: CSSProperties;
+  label?: CSSProperties;
 }
 
-export const AppLauncher: React.FC<AppLauncherProps> = ({ products }) => {
+export interface AppLauncherProps {
+  products: AppLauncherProduct[];
+  dropdownStyles?: DropdownStyles;
+}
+
+export const AppLauncher: React.FC<AppLauncherProps> = ({
+  products,
+  dropdownStyles = {},
+}) => {
   const [open, setOpen] = useState(false);
   const launcherRef = useRef<HTMLDivElement>(null);
+
+  // Default styles
+  const defaultStyles: Record<string, CSSProperties> = {
+    container: {
+      position: "absolute",
+      maxHeight: 350,
+      overflowY: "auto" as const,
+      top: 56,
+      left: 0,
+      zIndex: 1000,
+      background: "#fff",
+      borderRadius: 12,
+      boxShadow: "0 4px 16px rgba(0,0,0,0.15)",
+      padding: 16,
+      minWidth: 320,
+      marginTop: 4,
+      opacity: open ? 1 : 0,
+      transform: open ? "translateY(0)" : "translateY(-12px)",
+      transition:
+        "opacity 0.25s cubic-bezier(.4,2,.6,1), transform 0.25s cubic-bezier(.4,2,.6,1)",
+      pointerEvents: open ? "auto" : "none",
+    },
+    grid: {
+      display: "grid",
+      gridTemplateColumns: "repeat(3, 1fr)",
+      gap: 10,
+    },
+    item: {
+      textDecoration: "none",
+      color: "#222",
+      borderRadius: 8,
+      padding: 8,
+      transition: "background 0.2s",
+      display: "flex",
+      flexDirection: "column" as const,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    icon: {
+      width: 50,
+      height: 50,
+      marginBottom: 8,
+      objectFit: "contain" as const,
+    },
+    label: {
+      fontSize: 14,
+    },
+  };
+
+  // Merge default styles with custom styles
+  const styles = {
+    container: { ...defaultStyles.container, ...dropdownStyles.container },
+    grid: { ...defaultStyles.grid, ...dropdownStyles.grid },
+    item: { ...defaultStyles.item, ...dropdownStyles.item },
+    icon: { ...defaultStyles.icon, ...dropdownStyles.icon },
+    label: { ...defaultStyles.label, ...dropdownStyles.label },
+  };
 
   // Close dropdown on outside click or Escape
   useEffect(() => {
@@ -83,66 +152,24 @@ export const AppLauncher: React.FC<AppLauncherProps> = ({ products }) => {
       </button>
       {/* Dropdown Menu */}
       {open && (
-        <div
-          style={{
-            position: "absolute",
-            maxHeight: 350,
-            overflowY: "auto",
-            top: 56,
-            left: 0,
-            zIndex: 1000,
-            background: "#fff",
-            borderRadius: 12,
-            boxShadow: "0 4px 16px rgba(0,0,0,0.15)",
-            padding: 16,
-            minWidth: 320,
-            marginTop: 4,
-            opacity: open ? 1 : 0,
-            transform: open ? "translateY(0)" : "translateY(-12px)",
-            transition:
-              "opacity 0.25s cubic-bezier(.4,2,.6,1), transform 0.25s cubic-bezier(.4,2,.6,1)",
-            pointerEvents: open ? "auto" : "none",
-          }}
-        >
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(3, 1fr)",
-              gap: 10,
-            }}
-          >
+        <div style={styles.container}>
+          <div style={styles.grid}>
             {products.map((product) => (
               <a
                 key={product.name}
                 href={product.url}
                 title={product.name}
                 target="_blank"
-                style={{
-                  textDecoration: "none",
-                  color: "#222",
-                  borderRadius: 8,
-                  padding: 8,
-                  transition: "background 0.2s",
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
+                style={styles.item}
                 onClick={() => setOpen(false)}
               >
                 <img
                   src={product.icon}
                   alt={product.name}
-                  style={{
-                    width: 50,
-                    height: 50,
-                    marginBottom: 8,
-
-                    objectFit: "contain",
-                  }}
+                  style={styles.icon}
                   loading="lazy"
                 />
-                <div style={{ fontSize: 14 }}>{product.name}</div>
+                <div style={styles.label}>{product.name}</div>
               </a>
             ))}
           </div>
