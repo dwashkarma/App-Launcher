@@ -48,15 +48,23 @@ Include the app launcher in any HTML page by loading React, ReactDOM, and the ap
 
     <!-- Render the app launcher -->
     <script>
-        window.renderAppLauncher({
-            elementId: "app-launcher",
-            products: [
+       window.renderAppLauncher(
+            "app-launcher",
+            [
                 { name: "App 1", icon: "/images/app1.jpg", url: "https://example.com/app1" },
                 { name: "App 2", icon: "/images/app2.jpg", url: "https://example.com/app2" },
-                { name: "Dashboard", icon: "/images/dashboard.jpg", url: "https://example.com/dashboard" },
-                { name: "Analytics", icon: "/images/analytics.jpg", url: "https://example.com/analytics" }
             ],
-        });
+            {
+                // Optional configuration
+                svgColor: "#FF0000",  // Red dots
+                position: "right",    // Position the dropdown
+                dropdownStyles: {     // Custom styles
+                    container: {
+                        background: "#f5f5f5"
+                    }
+                }
+            }
+        );
     </script>
 </body>
 </html>
@@ -380,18 +388,32 @@ const largeIconStyles: DropdownStyles = {
     },
   };
 
-  window.renderAppLauncher({
-    elementId: "app-launcher",
-    products: [
-      { name: "Gmail", icon: "/icons/gmail.png", url: "https://gmail.com" },
+  window.renderAppLauncher(
+    "app-launcher",
+    [
       {
-        name: "Calendar",
-        icon: "/icons/calendar.png",
-        url: "https://calendar.google.com",
+        name: "App 1",
+        icon: "/images/app1.jpg",
+        url: "https://example.com/app1",
+      },
+      {
+        name: "App 2",
+        icon: "/images/app2.jpg",
+        url: "https://example.com/app2",
       },
     ],
-    options: { dropdownStyles: customStyles },
-  });
+    {
+      // Optional configuration
+      svgColor: "#FF0000", // Red dots
+      position: "right", // Position the dropdown
+      dropdownStyles: {
+        // Custom styles
+        container: {
+          background: "#f5f5f5",
+        },
+      },
+    }
+  );
 </script>
 ```
 
