@@ -2,7 +2,7 @@
 
 A React-based app launcher component available as an npm package and also via CDN for easy integration in any web page.
 
-![App Launcher Demo Image](https://i9bbkdzqlpglxpdo.public.blob.vercel-storage.com/APP%20Launcher-Za6Tlt9alnh7rQilmwYtcyKxWnyQRj)
+![App Launcher Demo Image](https://i9bbkdzqlpglxpdo.public.blob.vercel-storage.com/App-Launcher-v3sGILhBMszce5tB7jjj9HeqRn7Z67)
 
 ## Features
 
